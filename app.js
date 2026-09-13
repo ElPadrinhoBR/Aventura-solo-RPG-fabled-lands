@@ -107,7 +107,8 @@ let gameState = {
   notes: "",
   currentLandmark: "shipwreck_beach",
   visitedLandmarks: ["shipwreck_beach"],
-  travelHistory: ["shipwreck_beach"]
+  travelHistory: ["shipwreck_beach"],
+  visitedChoices: {}
 };
 
 // CACHE DAS SEÇÕES
@@ -136,19 +137,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   initMapSystem();
   renderCurrentSection();
 
-  // Inicializa o motor de áudio na primeira interação do usuário
-  const initAudioOnce = () => {
+  // Inicializa e mantém o motor de áudio ativo em qualquer interação do usuário
+  const ensureAudioActive = () => {
     if (window.soundEngine) {
       window.soundEngine.resume();
-      window.soundEngine.setTheme("sea");
     }
-    document.removeEventListener("click", initAudioOnce);
-    document.removeEventListener("keydown", initAudioOnce);
-    document.removeEventListener("touchstart", initAudioOnce);
   };
-  document.addEventListener("click", initAudioOnce);
-  document.addEventListener("keydown", initAudioOnce);
-  document.addEventListener("touchstart", initAudioOnce);
+  document.addEventListener("click", ensureAudioActive);
+  document.addEventListener("keydown", ensureAudioActive);
+  document.addEventListener("touchstart", ensureAudioActive);
 });
 
 /* ==========================================================
@@ -276,6 +273,24 @@ function renderCurrentSection() {
 /* ==========================================================
    ESCOLHAS E DECISÕES (MÚLTIPLA ESCOLHA PURA)
    ========================================================== */
+
+/**
+ * Retorna a classe CSS de "calor" baseada em quantas vezes
+ * aquele destino já foi visitado:
+ *   0 = nunca  → sem classe (visual padrão)
+ *   1 = 1 vez  → choice-visited-1 (levemente diferente)
+ *   2 = 2 vezes → choice-visited-2 (mais quente)
+ *   3+ = 3 vezes → choice-visited-3 (bem quente)
+ */
+function getChoiceHeatClass(targetNum) {
+  const key = String(targetNum);
+  const count = (gameState.visitedChoices && gameState.visitedChoices[key]) || 0;
+  if (count === 0) return "";
+  if (count === 1) return "choice-visited-1";
+  if (count === 2) return "choice-visited-2";
+  return "choice-visited-3";
+}
+
 function renderChoices(sec) {
   const container = document.getElementById("choices-list");
   container.innerHTML = "";
@@ -288,15 +303,26 @@ function renderChoices(sec) {
   const isLocked = activeCombat && activeCombat.staminaCurrent > 0;
 
   sec.choices.forEach(ch => {
+    const heatClass = getChoiceHeatClass(ch.target);
+    const visitCount = (gameState.visitedChoices && gameState.visitedChoices[String(ch.target)]) || 0;
+
     const btn = document.createElement("button");
-    btn.className = `choice-btn ${isLocked ? "combat-locked" : ""}`;
+    btn.className = `choice-btn ${isLocked ? "combat-locked" : ""} ${heatClass}`.trim();
+
     if (isLocked) {
       btn.disabled = true;
       btn.title = "Você precisa resolver o combate antes de tomar uma decisão!";
     }
-    
-    // Texto descritivo puro sem números
+
+    // Texto da escolha
     btn.textContent = ch.text || "Avançar na jornada";
+
+    // Indicador visual de repetição (tooltip discreto)
+    if (visitCount > 0) {
+      btn.title = visitCount === 1
+        ? "Você já percorreu este caminho antes."
+        : `Você já percorreu este caminho ${visitCount} vezes.`;
+    }
 
     btn.addEventListener("click", () => {
       if (activeCombat && activeCombat.staminaCurrent > 0) {
@@ -313,7 +339,12 @@ function renderChoices(sec) {
 
 function goToSection(targetNum) {
   if (targetNum <= 0 || isNaN(targetNum)) return;
-  
+
+  // Registrar que esta seção-destino foi escolhida
+  if (!gameState.visitedChoices) gameState.visitedChoices = {};
+  const key = String(targetNum);
+  gameState.visitedChoices[key] = (gameState.visitedChoices[key] || 0) + 1;
+
   if (gameState.currentSection !== targetNum) {
     gameState.history.push(gameState.currentSection);
     if (gameState.history.length > 20) gameState.history.shift();
@@ -322,6 +353,7 @@ function goToSection(targetNum) {
   gameState.currentSection = targetNum;
   renderCurrentSection();
 }
+
 
 /* ==========================================================
    TESTES DE HABILIDADE DINÂMICOS
@@ -1142,6 +1174,7 @@ function setupModals() {
       gameState.currentLandmark = "shipwreck_beach";
       gameState.visitedLandmarks = ["shipwreck_beach"];
       gameState.travelHistory = ["shipwreck_beach"];
+      gameState.visitedChoices = {};
       renderHeroSheet();
       updateCodewordsUI();
       renderCurrentSection();
@@ -1240,6 +1273,9 @@ function setupStartMenu() {
 
     btnContinue.onclick = () => {
       menuScreen.classList.add("hidden");
+      if (window.soundEngine) {
+        soundEngine.resume();
+      }
       loadSavedGame();
       renderHeroSheet();
       renderCurrentSection();
@@ -1253,7 +1289,10 @@ function setupStartMenu() {
   btnNew.onclick = () => {
     menuScreen.classList.add("hidden");
     // Mostrar prólogo antes da seleção de personagem
-    if (window.soundEngine) soundEngine.setTheme("sea");
+    if (window.soundEngine) {
+      soundEngine.resume();
+      soundEngine.setTheme("sea");
+    }
     document.getElementById("prologue-modal").classList.remove("hidden");
   };
 
@@ -1303,6 +1342,9 @@ function loadSavedGame() {
       }
       if (!Array.isArray(gameState.travelHistory)) {
         gameState.travelHistory = ["shipwreck_beach"];
+      }
+      if (!gameState.visitedChoices || typeof gameState.visitedChoices !== "object") {
+        gameState.visitedChoices = {};
       }
       updateCodewordsUI();
     }
@@ -1523,6 +1565,106 @@ function updateLocationTracking(sectionNum, sec) {
 
   // 4. Redesenhar rastro de viagem
   drawTravelTrail();
+
+  // 5. Atualizar banner de ilustração da cena (D&D Fantasy Art)
+  updateSceneIllustration(landmark, sectionNum);
+}
+
+// REGISTRO DE ILUSTRAÇÕES DE CENÁRIOS E LOCAIS
+const SCENE_IMAGES = {
+  shipwreck_beach: {
+    src: "assets/images/cenarios/falesias_brancas.jpg",
+    caption: "As imponentes Falésias Brancas de Golnir e a praia do naufrágio"
+  },
+  ringhorn: {
+    src: "assets/images/cenarios/porto_ringhorn.jpg",
+    caption: "O movimentado Porto de Ringhorn e suas muralhas douradas"
+  },
+  wishport: {
+    src: "assets/images/cenarios/porto_wishport.jpg",
+    caption: "O cais enevoado do Porto dos Desejos (Wishport)"
+  },
+  metriciens: {
+    src: "assets/images/cenarios/metropole_metriciens.jpg",
+    caption: "A magnífica Metrópole Real de Metriciens"
+  },
+  delpton: {
+    src: "assets/images/cenarios/vilarejo_delpton.jpg",
+    caption: "O pacato Vilarejo de Delpton às margens do Rio Rese"
+  },
+  wheatfields: {
+    src: "assets/images/cenarios/campos_de_trigo.jpg",
+    caption: "Os vastos Campos de Trigo dourados de Golnir"
+  },
+  ravayne: {
+    src: "assets/images/cenarios/castelo_ravayne.jpg",
+    caption: "As imponentes muralhas de pedra do Castelo Ravayne"
+  },
+  orlock: {
+    src: "assets/images/cenarios/castelo_orlock.jpg",
+    caption: "As tenebrosas ruínas do Castelo Orlock na costa sul"
+  },
+  tower_despair: {
+    src: "assets/images/cenarios/torre_desespero.jpg",
+    caption: "A misteriosa agulha negra da Torre do Desespero"
+  },
+  forsaken_forest: {
+    src: "assets/images/cenarios/floresta_abandonados.jpg",
+    caption: "A densa e sombria Floresta dos Abandonados"
+  },
+  haunted_hills: {
+    src: "assets/images/cenarios/colinas_assombradas.jpg",
+    caption: "Os montes fúnebres sob as névoas das Colinas Assombradas"
+  },
+  molhern: {
+    src: "assets/images/cenarios/mosteiro_molhern.jpg",
+    caption: "O isolado Mosteiro de Molhern, refúgio de cura e saber"
+  },
+  lacuna: {
+    src: "assets/images/cenarios/abadia_lacuna.jpg",
+    caption: "A sagrada Abadia de Lacuna no vale alpino"
+  },
+  violet_ocean: {
+    src: "assets/images/cenarios/oceano_violeta.jpg",
+    caption: "As águas profundas do Oceano Violeta sob ventos velozes"
+  },
+  dweomer: {
+    src: "assets/images/cenarios/ilha_feiticeiros.jpg",
+    caption: "A Ilha dos Feiticeiros (Dweomer), envolta em brumas mágicas"
+  }
+};
+
+/**
+ * Atualiza o banner de ilustração da narrativa se a imagem existir
+ */
+function updateSceneIllustration(landmark, sectionNum) {
+  const container = document.getElementById("story-scene-container");
+  const img = document.getElementById("story-scene-img");
+  const caption = document.getElementById("story-scene-caption");
+  if (!container || !img) return;
+
+  const key = landmark ? landmark.id : `sec_${sectionNum}`;
+  const scene = SCENE_IMAGES[key];
+
+  if (scene && scene.src) {
+    // Testa carregamento da imagem de forma segura
+    const testImg = new Image();
+    testImg.onload = () => {
+      img.src = scene.src;
+      img.alt = scene.caption || landmark?.name || "Cena da Aventura";
+      if (caption) {
+        caption.textContent = scene.caption || "";
+        caption.style.display = scene.caption ? "block" : "none";
+      }
+      container.classList.remove("hidden");
+    };
+    testImg.onerror = () => {
+      container.classList.add("hidden");
+    };
+    testImg.src = scene.src;
+  } else {
+    container.classList.add("hidden");
+  }
 }
 
 /**
