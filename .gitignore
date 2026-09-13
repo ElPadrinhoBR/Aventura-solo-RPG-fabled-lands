@@ -1,0 +1,30 @@
+﻿# PDFs do livro original
+*.pdf
+
+# Arquivos de sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# Scripts e arquivos internos de desenvolvimento
+scripts/
+PROMPT_ECONOMIA_TOKENS.md
+GUIA_JOGO_FL02.md
+roadmap.txt
+iniciar_jogo.bat
+
+# Imagens de teste temporárias (mantém apenas as finais)
+assets/images/mapa_test_*.jpg
+assets/images/mapa_mundo_1*.jpg
+assets/images/mapa_mundo_2*.jpg
+assets/images/collage.jpg
+assets/images/gravuras/pag*__*_norm.png
+
+# Arquivos de editor / IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Logs e cache
+*.log

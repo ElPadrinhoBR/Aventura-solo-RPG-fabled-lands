@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aventura Solo RPG – Fabled Lands: Cidades de Ouro e Glória</title>
+  <meta name="description" content="Aventura solo RPG de mundo aberto no Reino de Golnir. Explore, combata, tome decisões e forje seu destino nas Terras Lendárias.">
+  <meta name="theme-color" content="#2a1a0e">
+  <!-- Open Graph / GitHub / Discord preview -->
+  <meta property="og:title" content="Aventura Solo RPG – Fabled Lands: Cidades de Ouro e Glória">
+  <meta property="og:description" content="RPG de mundo aberto baseado no livro-jogo clássico Fabled Lands Livro 2. Explore o Reino Mercantil de Golnir, combata monstros e forje seu destino.">
+  <meta property="og:image" content="assets/icon-512.png">
+  <meta property="og:type" content="website">
+  <!-- Favicon -->
+  <link rel="icon" href="assets/favicon.ico" type="image/x-icon">
+  <link rel="apple-touch-icon" href="assets/favicon-192.png">
+  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&family=MedievalSharp&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- TOAST DE SALVAMENTO AUTOMÁTICO -->
+  <div id="autosave-toast" class="autosave-toast">💾 Jogo Salvo Automaticamente</div>
+
+  <!-- TELA DO MENU INICIAL (START MENU) -->
+  <div id="start-menu-screen" class="start-menu-screen">
+    <div class="start-menu-box">
+      <h1 class="menu-title">Fabled Lands</h1>
+      <h2 class="menu-subtitle">Livro 2: Cidades de Ouro e Glória (Golnir)</h2>
+      
+      <div id="menu-save-preview" class="menu-save-preview hidden">
+        <h4>Aventura Salva</h4>
+        <p id="menu-save-details">Carregando dados salvos...</p>
+      </div>
+
+      <div class="menu-buttons">
+        <button id="btn-menu-continue" class="btn btn-action btn-menu hidden">▶ Continuar Aventura</button>
+        <button id="btn-menu-new" class="btn btn-primary btn-menu">⚔️ Nova Aventura</button>
+        <button id="btn-menu-rules" class="btn btn-secondary btn-menu">📜 Regras e Como Jogar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="app" class="game-wrapper">
+    <!-- BARRA SUPERIOR / CABEÇALHO -->
+    <header class="game-header">
+      <div class="header-left">
+        <h1 class="game-title">Fabled Lands</h1>
+        <span class="game-subtitle">Livro 2: Cidades de Ouro e Glória (Golnir)</span>
+      </div>
+      <div class="header-actions">
+        <!-- CONTROLE DE ÁUDIO PROCEDURAL -->
+        <div class="audio-widget" id="audio-widget">
+          <button id="btn-audio-mute" class="btn btn-audio" title="Mudar som (Mudo / Ativo)">🔊</button>
+          <input type="range" id="volume-slider" min="0" max="1" step="0.05" value="0.4" title="Volume da Música e Efeitos">
+        </div>
+        <button id="btn-main-menu" class="btn btn-secondary" title="Voltar ao Menu Principal">🏠 Menu</button>
+        <button id="btn-char-select" class="btn btn-secondary" title="Trocar ou criar personagem">👤 Personagem</button>
+        <button id="btn-open-map" class="btn btn-action" title="Abrir Mapa Fiel de Golnir">🗺️ Mapa</button>
+        <button id="btn-dice-roller" class="btn btn-secondary" title="Rolar dados manuais">🎲 Rolar Dados</button>
+        <button id="btn-save-game" class="btn btn-secondary" title="Exportar Arquivo de Save">💾 Exportar</button>
+        <button id="btn-load-game" class="btn btn-secondary" title="Importar Arquivo de Save">📂 Importar</button>
+        <button id="btn-rules-help" class="btn btn-secondary" title="Regras e Ajuda">📜 Regras</button>
+        <button id="btn-restart-game" class="btn btn-danger" title="Reiniciar do Início">🔄 Reiniciar</button>
+      </div>
+    </header>
+
+    <!-- NAVEGAÇÃO DE ABAS PARA MOBILE -->
+    <nav class="mobile-tabs" id="mobile-tabs">
+      <button class="mobile-tab-btn active" data-target="story-column">📖 História</button>
+      <button class="mobile-tab-btn" data-target="char-column">⚔️ Ficha</button>
+      <button class="mobile-tab-btn" data-target="inventory-column">🎒 Mochila & Navio</button>
+      <button class="mobile-tab-btn" data-target="codewords-column">🗝️ Palavras-Código</button>
+      <button class="mobile-tab-btn" id="mobile-btn-map" data-target="map-modal">🗺️ Mapa</button>
+    </nav>
+
+    <!-- CONTEÚDO PRINCIPAL (LAYOUT 2 COLUNAS / PAINÉIS) -->
+    <main class="main-content">
+      
+      <!-- COLUNA PRINCIPAL: HISTÓRIA & AÇÕES -->
+      <section class="story-column" id="story-column">
+        <div class="tome-container">
+          <!-- CABEÇALHO NARRATIVO -->
+          <div class="narrative-meta-header">
+            <div class="chapter-info">
+              <span class="chapter-icon">⚔️</span>
+              <span id="story-location-title" class="story-location-title">Crônicas de Golnir</span>
+            </div>
+            <div class="story-status-indicator">
+              <span class="status-dot"></span>
+              <span>História em Andamento</span>
+            </div>
+          </div>
+
+          <!-- CARD DE NARRATIVA -->
+          <article class="narrative-body" id="narrative-body">
+            <div id="section-text" class="section-text">
+              Carregando narrativa...
+            </div>
+          </article>
+
+          <!-- TESTES DE HABILIDADE DINÂMICOS (SE HOUVER NA SEÇÃO) -->
+          <div id="check-panel" class="special-card check-panel hidden">
+            <h3 class="panel-title">🎯 Teste de Habilidade Solicitado</h3>
+            <p id="check-desc">Faça um teste de perícia para determinar seu destino.</p>
+            <div class="check-action-box">
+              <div class="check-info">
+                <span class="check-stat-badge" id="check-stat-name">COMBATE</span>
+                <span class="check-diff-badge">Dificuldade: <strong id="check-difficulty">10</strong></span>
+              </div>
+              <button id="btn-roll-check" class="btn btn-action">🎲 Rolar 2d6 + Habilidade</button>
+            </div>
+            <div id="check-result-box" class="check-result-box hidden">
+              <div id="check-dice-display" class="dice-display"></div>
+              <div id="check-outcome-message" class="outcome-msg"></div>
+            </div>
+          </div>
+
+          <!-- SISTEMA DE COMBATE DINÂMICO (SE HOUVER NA SEÇÃO) -->
+          <div id="combat-panel" class="special-card combat-panel hidden">
+            <h3 class="panel-title">⚔️ Combate em Andamento!</h3>
+            <div class="combat-decision-banner">
+              ⚠️ <em>Você está em combate! Suas escolhas de caminho estarão bloqueadas até a resolução da luta.</em>
+            </div>
+            <div class="combatants-container">
+              <div class="combatant hero-side">
+                <h4>Você</h4>
+                <div class="combatant-stats">
+                  <span>Defesa: <strong id="hero-combat-defence">5</strong></span>
+                  <span>Vigor: <strong id="hero-combat-stamina">12</strong></span>
+                </div>
+              </div>
+              <div class="combat-vs">VS</div>
+              <div class="combatant enemy-side">
+                <h4 id="enemy-name">Inimigo</h4>
+                <div class="combatant-stats">
+                  <span>Combate: <strong id="enemy-combat-val">4</strong></span>
+                  <span>Defesa: <strong id="enemy-defence-val">5</strong></span>
+                  <span>Vigor: <strong id="enemy-stamina-val">8</strong></span>
+                </div>
+              </div>
+            </div>
+            <div class="combat-actions">
+              <button id="btn-attack-round" class="btn btn-action">⚔️ Lutar Rodada</button>
+              <button id="btn-flee-combat" class="btn btn-secondary hidden">🏃 Tentar Fugir</button>
+            </div>
+            <div id="combat-log" class="combat-log"></div>
+            
+            <div id="combat-victory-box" class="combat-victory-box hidden">
+              <h4>🏆 Vitória Triunfante!</h4>
+              <p>Você derrotou o oponente! Suas decisões foram liberadas para avançar.</p>
+            </div>
+
+            <div id="combat-defeat-box" class="combat-defeat-box hidden">
+              <h4>💀 Você Sucumbiu aos Ferimentos...</h4>
+              <p id="defeat-desc">Seu Vigor chegou a zero nas terras de Golnir.</p>
+              <div id="resurrection-fate-panel" class="resurrection-fate-panel hidden"></div>
+              <div id="defeat-actions" class="defeat-actions" style="margin-top:12px; display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+                <button id="btn-resurrect" class="btn btn-action">✨ Suplicar aos Deuses (Ressurreição)</button>
+                <button id="btn-restart-after-death" class="btn btn-danger">🔄 Recomeçar Aventura</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- OPÇÕES E ESCOLHAS DE CAMINHO -->
+          <div class="choices-container">
+            <h3 class="choices-title">Suas Decisões</h3>
+            <div id="choices-list" class="choices-list">
+              <!-- Botões de escolhas gerados via JavaScript -->
+            </div>
+          </div>
+
+          <!-- RODAPÉ NARRATIVO -->
+          <footer class="history-tray">
+            <span class="history-label">📖 Seu caminho é único e moldado por suas escolhas.</span>
+            <span style="font-size:0.78rem; color:#8c7562; font-style:italic;">🔒 Sem recuo • O destino aguarda</span>
+          </footer>
+        </div>
+      </section>
+
+      <!-- COLUNA LATERAL: FICHA DO PERSONAGEM, INVENTÁRIO, PALAVRAS-CÓDIGO -->
+      <aside class="sidebar-column">
+        
+        <!-- WIDGET DE LOCALIZAÇÃO GEOGRÁFICA / BÚSSOLA -->
+        <div class="sidebar-section-card location-widget-card" id="location-widget-card">
+          <div class="location-widget-header">
+            <span class="location-widget-icon" id="widget-loc-icon">📍</span>
+            <div class="location-widget-info">
+              <span class="location-widget-label">LOCALIZAÇÃO ATUAL</span>
+              <h4 class="location-widget-name" id="widget-loc-name">Falésias Brancas</h4>
+            </div>
+          </div>
+          <p class="location-widget-desc" id="widget-loc-desc">Praia desolada aos pés de imponentes falésias de giz branco.</p>
+          <button id="btn-quick-view-map" class="btn btn-action btn-block" style="margin-top: 8px;">🗺️ Abrir Mapa Fiel</button>
+        </div>
+
+        <!-- PAINEL DA FICHA DO PERSONAGEM -->
+        <div class="char-sheet-card" id="char-column">
+          <div class="char-header">
+            <div class="char-avatar" id="char-avatar">🗡️</div>
+            <div class="char-identity">
+              <input type="text" id="char-name" class="char-name-input" value="Liana, a Veloz" title="Clique para editar o nome">
+              <div class="char-meta">
+                <span id="char-profession">Andarilha</span> • 
+                <span>Posto <strong id="char-rank">2</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- VITALIDADE & CACOS -->
+          <div class="vitals-grid">
+            <div class="vital-card stamina-card">
+              <div class="vital-label">VIGOR</div>
+              <div class="vital-control">
+                <button class="vital-btn" id="btn-stamina-minus">-</button>
+                <span class="vital-value"><span id="char-stamina-current">13</span> / <span id="char-stamina-max">13</span></span>
+                <button class="vital-btn" id="btn-stamina-plus">+</button>
+              </div>
+            </div>
+
+            <div class="vital-card defence-card">
+              <div class="vital-label">DEFESA TOTAL</div>
+              <div class="vital-val-display" id="char-defence-total">5</div>
+              <small class="vital-formula" title="Posto + Combate + Armadura">Posto + Combate + Armadura</small>
+            </div>
+
+            <div class="vital-card shards-card">
+              <div class="vital-label">CACOS DE OURO</div>
+              <div class="vital-control">
+                <button class="vital-btn" id="btn-shards-minus">-</button>
+                <input type="number" id="char-shards-input" class="shards-input" value="20" min="0">
+                <button class="vital-btn" id="btn-shards-plus">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- HABILIDADES BÁSICAS -->
+          <div class="abilities-section">
+            <h4 class="section-subheading">Habilidades do Aventureiro</h4>
+            <div class="abilities-grid">
+              <div class="ability-card" data-ability="COMBAT">
+                <span class="ability-name">Combate</span>
+                <div class="ability-control">
+                  <button class="ability-mod-btn" data-op="-">-</button>
+                  <strong class="ability-val" id="stat-combat">3</strong>
+                  <button class="ability-mod-btn" data-op="+">+</button>
+                </div>
+                <button class="btn-roll-stat" data-stat="COMBAT" title="Rolar teste rápido">🎲</button>
+              </div>
+
+              <div class="ability-card" data-ability="MAGIC">
+                <span class="ability-name">Magia</span>
+                <div class="ability-control">
+                  <button class="ability-mod-btn" data-op="-">-</button>
+                  <strong class="ability-val" id="stat-magic">2</strong>
+                  <button class="ability-mod-btn" data-op="+">+</button>
+                </div>
+                <button class="btn-roll-stat" data-stat="MAGIC" title="Rolar teste rápido">🎲</button>
+              </div>
+
+              <div class="ability-card" data-ability="SANCTITY">
+                <span class="ability-name">Santidade</span>
+                <div class="ability-control">
+                  <button class="ability-mod-btn" data-op="-">-</button>
+                  <strong class="ability-val" id="stat-sanctity">2</strong>
+                  <button class="ability-mod-btn" data-op="+">+</button>
+                </div>
+                <button class="btn-roll-stat" data-stat="SANCTITY" title="Rolar teste rápido">🎲</button>
+              </div>
+
+              <div class="ability-card" data-ability="THIEVERY">
+                <span class="ability-name">Ladinagem</span>
+                <div class="ability-control">
+                  <button class="ability-mod-btn" data-op="-">-</button>
+                  <strong class="ability-val" id="stat-thievery">4</strong>
+                  <button class="ability-mod-btn" data-op="+">+</button>
+                </div>
+                <button class="btn-roll-stat" data-stat="THIEVERY" title="Rolar teste rápido">🎲</button>
+              </div>
+
+              <div class="ability-card" data-ability="SCOUTING">
+                <span class="ability-name">Exploração</span>
+                <div class="ability-control">
+                  <button class="ability-mod-btn" data-op="-">-</button>
+                  <strong class="ability-val" id="stat-scouting">6</strong>
+                  <button class="ability-mod-btn" data-op="+">+</button>
+                </div>
+                <button class="btn-roll-stat" data-stat="SCOUTING" title="Rolar teste rápido">🎲</button>
+              </div>
+
+              <div class="ability-card" data-ability="STREETWISE">
+                <span class="ability-name">Sobrevivência</span>
+                <div class="ability-control">
+                  <button class="ability-mod-btn" data-op="-">-</button>
+                  <strong class="ability-val" id="stat-streetwise">3</strong>
+                  <button class="ability-mod-btn" data-op="+">+</button>
+                </div>
+                <button class="btn-roll-stat" data-stat="STREETWISE" title="Rolar teste rápido">🎲</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- BÊNÇÃOS E TÍTULOS -->
+          <div class="meta-traits">
+            <div class="trait-group">
+              <label>Bênção Divina:</label>
+              <input type="text" id="char-blessing" placeholder="Nenhuma (Ex: Alvir, Nagil...)">
+            </div>
+            <div class="trait-group">
+              <label>Títulos / Honrarias:</label>
+              <input type="text" id="char-titles" placeholder="Ex: Cidadão de Ringhorn...">
+            </div>
+          </div>
+        </div>
+
+        <!-- PAINEL DE MOCHILA & NAVIO -->
+        <div class="sidebar-section-card" id="inventory-column">
+          <div class="tab-header">
+            <button class="subtab-btn active" data-subtab="inv-subtab">🎒 Mochila (<span id="inv-count">0</span>/12)</button>
+            <button class="subtab-btn" data-subtab="ship-subtab">⛵ Frota & Cargas</button>
+            <button class="subtab-btn" data-subtab="notes-subtab">📝 Diário</button>
+          </div>
+
+          <!-- SUB-ABA: INVENTÁRIO -->
+          <div id="inv-subtab" class="subtab-content active">
+            <div class="inv-actions">
+              <input type="text" id="new-item-input" placeholder="Novo item (Ex: Poção, Espada +1)...">
+              <button id="btn-add-item" class="btn btn-small btn-primary">+ Add</button>
+            </div>
+            <ul id="inventory-list" class="inventory-list">
+              <!-- Itens injetados via JS -->
+            </ul>
+          </div>
+
+          <!-- SUB-ABA: FROTA NAVAL -->
+          <div id="ship-subtab" class="subtab-content hidden">
+            <div class="ship-details">
+              <div class="ship-field">
+                <label>Tipo de Navio:</label>
+                <select id="ship-type">
+                  <option value="none">Nenhum navio</option>
+                  <option value="Barca">Barca (Pequeno - 1 Carga)</option>
+                  <option value="Bergantim">Bergantim (Médio - 2 Cargas)</option>
+                  <option value="Galeao">Galeão (Grande - 3 Cargas)</option>
+                </select>
+              </div>
+              <div class="ship-field">
+                <label>Qualidade da Tripulação:</label>
+                <select id="ship-crew">
+                  <option value="Ruim">Ruim (-1 nos testes navais)</option>
+                  <option value="Media" selected>Média (Padrão)</option>
+                  <option value="Boa">Boa (+1 nos testes navais)</option>
+                  <option value="Excelente">Excelente (+2 nos testes navais)</option>
+                </select>
+              </div>
+              <div class="ship-field">
+                <label>Porto Atual:</label>
+                <input type="text" id="ship-docked-port" placeholder="Ex: Ringhorn, Mar Aberto...">
+              </div>
+              <div class="cargo-box">
+                <label>Cargas Transportadas:</label>
+                <textarea id="ship-cargo" rows="2" placeholder="Ex: 1 Carga de Seda, 1 Carga de Vinho..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUB-ABA: DIÁRIO DE NOTAS -->
+          <div id="notes-subtab" class="subtab-content hidden">
+            <textarea id="player-notes" class="player-notes" placeholder="Guarde aqui pistas, promessas, nomes de tavernas, missões abertas e segredos que encontrar em Golnir..."></textarea>
+          </div>
+        </div>
+
+        <!-- PAINEL DE PALAVRAS-CÓDIGO (CODEWORDS) -->
+        <div class="sidebar-section-card" id="codewords-column">
+          <div class="card-title-row">
+            <h4 class="section-subheading">Palavras-Código (Golnir)</h4>
+            <input type="text" id="filter-codewords" class="filter-input" placeholder="Filtrar...">
+          </div>
+          <div id="codewords-grid" class="codewords-grid">
+            <!-- Checkboxes gerados via JS -->
+          </div>
+        </div>
+
+      </aside>
+    </main>
+
+    <!-- MODAL DE SELEÇÃO / CRIAÇÃO DE PERSONAGEM -->
+    <div id="char-modal" class="modal-backdrop hidden">
+      <div class="modal-window">
+        <header class="modal-header">
+          <h2>Selecione seu Personagem Inicial</h2>
+          <button class="modal-close" id="btn-close-char-modal">&times;</button>
+        </header>
+        <div class="modal-content">
+          <p class="modal-intro">Escolha um dos aventureiros clássicos de <em>Fabled Lands</em> ou crie seu próprio herói para desbravar Golnir:</p>
+          <div class="premade-grid" id="premade-grid">
+            <!-- Cartões de personagens gerados por JS -->
+          </div>
+          <div class="custom-hero-divider">
+            <span>OU CRIE SEU PRÓPRIO HERÓI</span>
+          </div>
+          <div class="custom-hero-form">
+            <div class="form-row">
+              <input type="text" id="custom-hero-name" placeholder="Nome do seu Aventureiro">
+              <select id="custom-hero-prof">
+                <option value="Andarilho">Andarilho</option>
+                <option value="Guerreiro">Guerreiro</option>
+                <option value="Mago">Mago</option>
+                <option value="Ladino">Ladino</option>
+                <option value="Sacerdote">Sacerdote</option>
+                <option value="Trovador">Trovador</option>
+              </select>
+            </div>
+            <button id="btn-create-custom-hero" class="btn btn-action">Criar Herói Personalizado</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE ROLAGEM DE DADOS MANUAL -->
+    <div id="dice-modal" class="modal-backdrop hidden">
+      <div class="modal-window modal-small">
+        <header class="modal-header">
+          <h2>Rolador de Dados</h2>
+          <button class="modal-close" id="btn-close-dice-modal">&times;</button>
+        </header>
+        <div class="modal-content text-center">
+          <div class="dice-cup">
+            <div class="die-face" id="modal-die-1">⚅</div>
+            <div class="die-face" id="modal-die-2">⚂</div>
+          </div>
+          <div class="dice-total-box">
+            Total: <span id="modal-dice-total">9</span>
+          </div>
+          <div class="dice-buttons">
+            <button id="btn-roll-1d6" class="btn btn-secondary">Rolar 1d6</button>
+            <button id="btn-roll-2d6" class="btn btn-action">Rolar 2d6</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE PRÓLOGO & INTRODUÇÃO DA AVENTURA -->
+    <div id="prologue-modal" class="modal-backdrop hidden">
+      <div class="modal-window prologue-window">
+        <header class="modal-header">
+          <h2>Prólogo: O Chamado das Terras Lendárias</h2>
+        </header>
+        <div class="modal-content prologue-content">
+          <div class="prologue-scroll">
+            <p class="prologue-lead"><em>«Guardado em um tubo de couro sob seu gibão está o mapa em pergaminho que seu avô lhe entregou em seu leito de morte — um mapa de terras lendárias além do horizonte ocidental...»</em></p>
+            
+            <p>O céu ao amanhecer tinge-se com um verde-acinzentado leitoso, como jade. Segurando o leme do seu pequeno barco a vela, você mantém os olhos fixos na constelação da Aranha, sob a qual nasceu. O mar é uma lâmina de prata e a água em seu barril mal basta para mais um dia.</p>
+
+            <p>Guardado sob seu gibão está o antigo mapa desenhado em pergaminho que seu avô lhe entregou em seu leito de morte. Você ainda escuta suas histórias sobre travessias perigosas, reinos de riqueza incomensurável além do horizonte ocidental, ilhas feiticeiras e palácios arruinados transbordando ouro.</p>
+
+            <p>De repente, uma linha de falésias brancas rompe o horizonte: <strong>Golnir</strong>, o reino mais próspero e perigoso de Harkuna! Mas a aproximação é violenta: ventos tempestuosos despedaçam seu leme contra os rochedos afiados. Você salta no último segundo enquanto as ondas engolem seu navio...</p>
+
+            <p class="prologue-punch">Uma onda furiosa arrebata seu corpo exausto e o arremessa sobre as areias de uma praia deserta. Você está ferido, empapado e sem navio... <strong>mas sua lendária aventura acaba de começar!</strong></p>
+          </div>
+          <div class="prologue-actions">
+            <button id="btn-start-prologue-journey" class="btn btn-action btn-menu">🌊 Despertar na Praia de Golnir (Iniciar Aventura)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DE REGRAS E COMO JOGAR -->
+    <div id="rules-modal" class="modal-backdrop hidden">
+      <div class="modal-window">
+        <header class="modal-header">
+          <h2>📜 Regras e Como Jogar</h2>
+          <button class="modal-close" id="btn-close-rules-modal">&times;</button>
+        </header>
+        <div class="modal-content">
+          <h3>🎯 Objetivo</h3>
+          <p>Você é um aventureiro em <em>Golnir</em>, o segundo livro das Terras Lendárias. Explore o mundo, tome decisões e sobreviva às criaturas e armadilhas que encontrar.</p>
+
+          <h3>📖 Como Avançar</h3>
+          <p>Leia o texto narrativo e clique nos <strong>botões de escolha</strong> para avançar na história. Cada escolha leva a um novo evento.</p>
+
+          <h3>⚔️ Combate</h3>
+          <p>Quando encontrar inimigos, o painel de combate aparece. Clique em <strong>"Lutar Rodada"</strong> para cada rodada de confronto. Tanto você quanto o inimigo rolam 2d6 + Combate e tentam superar a Defesa do adversário. O dano causado é a diferença entre o ataque e a defesa do alvo.</p>
+          <p><strong>⚠️ As escolhas de caminho ficam bloqueadas durante o combate!</strong> Você pode tentar o botão <strong>"🏃 Tentar Fugir"</strong> se a luta estiver desfavorável.</p>
+
+          <h3>🎲 Testes de Habilidade</h3>
+          <p>Algumas seções pedem um teste de perícia. Role os dados e some com sua habilidade relevante. Se o resultado for igual ou maior à dificuldade, você passa!</p>
+
+          <h3>❤️ Vigor</h3>
+          <p>Seu Vigor representa sua vida. Se cair a zero, você é derrotado. Ao cair, você pode suplicar uma <strong>Ressurreição aos Deuses</strong> para obter uma segunda chance ou sucumbir à morte final.</p>
+
+          <h3>🗝️ Palavras-Código</h3>
+          <p>Certos eventos marcam Palavras-Código no seu registro. Elas desbloqueiam caminhos futuros e indicam que você realizou certas ações no mundo de Golnir.</p>
+
+          <h3>🎒 Inventário</h3>
+          <p>Você pode carregar até <strong>12 itens</strong>. Armaduras com "+X Defesa" são calculadas automaticamente. Gerencie seu inventário no painel lateral.</p>
+
+          <h3>💾 Salvamento Automático</h3>
+          <p>O jogo salva automaticamente a cada transição de cena. Você pode exportar e importar seus salvamentos manualmente com os botões no cabeçalho.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL DO MAPA FIEL DE GOLNIR E GRAVURAS -->
+    <div id="map-modal" class="modal-backdrop hidden">
+      <div class="modal-window map-modal-window">
+        <header class="modal-header">
+          <div class="map-modal-title-box">
+            <h2>🗺️ O Reino Mercantil de Golnir</h2>
+            <span class="map-modal-subtitle">Mapa Fiel & Gravuras do Livro Solo</span>
+          </div>
+          <div class="map-nav-tabs">
+            <button class="map-tab-btn active" data-map-tab="tab-golnir-map">🗺️ Mapa de Golnir</button>
+            <button class="map-tab-btn" data-map-tab="tab-world-map">🌍 Mundo Conhecido</button>
+            <button class="map-tab-btn" data-map-tab="tab-illustrations">🖼️ Gravuras do Livro</button>
+          </div>
+          <button class="modal-close" id="btn-close-map-modal">&times;</button>
+        </header>
+
+        <div class="map-modal-content">
+          <!-- ABA 1: MAPA DE GOLNIR -->
+          <div id="tab-golnir-map" class="map-view-tab active">
+            <div class="map-toolbar">
+              <div class="map-zoom-controls">
+                <button id="btn-zoom-in" class="btn btn-small btn-secondary" title="Aproximar Zoom">🔍 +</button>
+                <button id="btn-zoom-out" class="btn btn-small btn-secondary" title="Afastar Zoom">🔍 -</button>
+                <button id="btn-zoom-reset" class="btn btn-small btn-secondary" title="Redefinir Posição">🎯 Centralizar</button>
+                <button id="btn-toggle-trail" class="btn btn-small btn-secondary active" title="Alternar Rastro de Viagem">👣 Trilha de Passos</button>
+              </div>
+              <div class="map-location-badge">
+                <span>Você está em: <strong id="map-hero-loc-badge">Falésias Brancas</strong></span>
+              </div>
+            </div>
+
+            <div class="map-viewport" id="map-viewport">
+              <div class="map-canvas-container" id="map-canvas-container">
+                <!-- Imagem do mapa de Golnir -->
+                <img src="assets/images/mapa_golnir.jpg" alt="Mapa do Reino de Golnir" id="map-img" class="map-image" draggable="false">
+                
+                <!-- SVG para linha da trilha de passos percorrida -->
+                <svg id="map-trail-svg" class="map-trail-svg"></svg>
+
+                <!-- Marcador pulsante do herói -->
+                <div id="hero-map-marker" class="hero-map-marker" title="Sua posição atual">
+                  <div class="hero-marker-pulse"></div>
+                  <div class="hero-marker-pin">📍</div>
+                  <span class="hero-marker-label" id="hero-marker-label">Você</span>
+                </div>
+
+                <!-- Camada de Marcadores / Pontos de Interesse (injetados dinamicamente via JS) -->
+                <div id="map-landmarks-layer" class="map-landmarks-layer"></div>
+              </div>
+            </div>
+
+            <!-- Painel inferior de detalhes do ponto selecionado -->
+            <div id="map-landmark-card" class="map-landmark-card hidden">
+              <div class="landmark-card-header">
+                <span id="landmark-card-icon" class="landmark-card-icon">🏛️</span>
+                <div>
+                  <h4 id="landmark-card-title">Porto de Ringhorn</h4>
+                  <span id="landmark-card-type" class="landmark-card-type">Porto / Cidade</span>
+                </div>
+                <button id="btn-close-landmark-card" class="landmark-card-close">&times;</button>
+              </div>
+              <p id="landmark-card-desc">Descrição do local...</p>
+              <div class="landmark-card-status" id="landmark-card-status">
+                <span class="badge-status">Explorado</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ABA 2: MAPA DO MUNDO CONHECIDO -->
+          <div id="tab-world-map" class="map-view-tab hidden">
+            <div class="world-map-wrapper">
+              <img src="assets/images/mapa_mundo_oriente.jpg" alt="Mapa do Mundo Conhecido" class="world-map-img">
+              <div class="world-map-caption">
+                <h3>🌍 O Mundo Conhecido de Harkuna</h3>
+                <p>Este mapa náutico original mostra as ligações oceânicas entre Golnir, as terras de Sokara (Livro 1), as misteriosas Ilhas Inumeráveis ao sul e os reinos distantes do Mar das Estepes.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- ABA 3: GRAVURAS DO LIVRO -->
+          <div id="tab-illustrations" class="map-view-tab hidden">
+            <div class="illustrations-gallery" id="illustrations-gallery">
+              <!-- Injetadas via JS a partir de BOOK_ILLUSTRATIONS -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="audio.js"></script>
+  <script src="data/sections_bundle.js"></script>
+  <script src="data/map_locations.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
