@@ -782,6 +782,95 @@ body {
   background: linear-gradient(180deg, #fcd8c0 0%, #de9878 100%);
 }
 
+/* REQUISITOS DE ESCOLHA (ITENS, CODEWORDS, ETC.) */
+.choice-btn.choice-locked {
+  background: #f4ede2 !important;
+  border-color: #cfbea5 !important;
+  border-left-color: #8c7355 !important;
+  color: #7d6b56 !important;
+  cursor: not-allowed !important;
+  opacity: 0.75;
+}
+
+.choice-btn.choice-locked:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.choice-req-tag {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+.choice-req-tag.locked {
+  background: #fae3e3;
+  color: #a82020;
+  border: 1px solid #e2b4b4;
+}
+
+.choice-req-tag.unlocked {
+  background: #e6f4ea;
+  color: #137333;
+  border: 1px solid #a8dab5;
+}
+
+/* BOTÃO DE RETORNO DE SEGURANÇA (FALLBACK QUANDO BLOQUEADO) */
+.choice-btn.choice-fallback-return {
+  background: linear-gradient(180deg, #f0f7ff 0%, #dbeafe 100%);
+  border-left-color: #2563eb;
+  border-color: #93c5fd;
+  color: #1e3a8a;
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.choice-btn.choice-fallback-return:hover {
+  background: linear-gradient(180deg, #e0f0fe 0%, #bfdbfe 100%);
+  border-left-color: #1d4ed8;
+}
+
+/* BANNER DE RECOMPENSA AUTOMÁTICA ADQUIRIDA */
+.reward-toast-banner {
+  background: linear-gradient(135deg, #fef9e7 0%, #fdf0cd 100%);
+  border: 2px solid #d4af37;
+  border-radius: 6px;
+  padding: 10px 16px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.25);
+  animation: slideDown 0.35s ease-out;
+}
+
+.reward-toast-icon {
+  font-size: 1.6rem;
+}
+
+.reward-toast-text h5 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  color: #785208;
+  margin: 0;
+}
+
+.reward-toast-text p {
+  font-size: 0.88rem;
+  color: #4a3410;
+  margin: 2px 0 0 0;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 /* HISTÓRICO */
 
 .history-tray {

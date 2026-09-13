@@ -387,6 +387,10 @@
       {
         "text": "Se possuir o título Amado das Três Fortunas",
         "target": 180
+      },
+      {
+        "text": "Caso não possua a bênção das Três Fortunas",
+        "target": 203
       }
     ],
     "combats": [],
@@ -1955,6 +1959,10 @@
       {
         "text": "Se você for de Posto 4 ou superior",
         "target": 341
+      },
+      {
+        "text": "Se for de 3º Posto ou inferior (não for 4º Posto ou superior)",
+        "target": 364
       }
     ],
     "combats": [],
@@ -2269,6 +2277,10 @@
       {
         "text": "Se possuir o título Paladino de Ravayne",
         "target": 250
+      },
+      {
+        "text": "Se não possuir o título de Paladino de Ravayne",
+        "target": 273
       }
     ],
     "combats": [],
@@ -2354,6 +2366,10 @@
       {
         "text": "Se possuir a palavra-código Bosky",
         "target": 772
+      },
+      {
+        "text": "Se não tiver a palavra-código Bosky",
+        "target": 382
       }
     ],
     "combats": [],
@@ -2570,6 +2586,10 @@
       {
         "text": "Se possuir a palavra-código Bumble",
         "target": 149
+      },
+      {
+        "text": "Se não tiver a palavra-código Bumble",
+        "target": 28
       }
     ],
     "combats": [],
@@ -3212,6 +3232,10 @@
       {
         "text": "Se a caixa estiver marcada e possuir a chave das estrelas",
         "target": 206
+      },
+      {
+        "text": "Se não estiver carregando a Chave das Estrelas",
+        "target": 275
       }
     ],
     "combats": [],
@@ -3480,7 +3504,12 @@
     "id": 174,
     "text": "Recupere o dinheiro que os assassinos roubaram. Você desdenha tomar\n\nas facas de dente do diabo que eles estavam usando, mas você pode dar uma olhada\n\namuleto de escaravelho e um colete de couro (Defesa +1). Então",
     "text_en": "Recover the money that the assassins stole. You disdain to take\nthe deviltooth knives they were using, but you can take a\nscarab amulet and a leather jerkin ( Defence +1) . Then turn\nto 2.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Partir para o Porto de Ringhorn",
+        "target": 2
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -3585,6 +3614,10 @@
       {
         "text": "Se possuir o amuleto de pé de coelho",
         "target": 226
+      },
+      {
+        "text": "Caso não possua o amuleto de pé de coelho",
+        "target": 203
       }
     ],
     "combats": [],
@@ -3663,6 +3696,10 @@
       {
         "text": "Se possuir uma cabeça decepada",
         "target": 369
+      },
+      {
+        "text": "Caso não carregue uma cabeça decepada",
+        "target": 381
       }
     ],
     "combats": [],
@@ -4514,12 +4551,16 @@
   },
   "226": {
     "id": 226,
-    "text": "A suma sacerdotisa vê o amuleto em seu pescoço e sorri.\n\n“As deusas certamente irão favorecer você”, diz ela.\n\nSe você tiver uma ferradura de prata Caso contrário",
+    "text": "A suma sacerdotisa vê o amuleto em seu pescoço e sorri.\n\n“As deusas certamente irão favorecer você”, diz ela.",
     "text_en": "The high priestess sees the charm around your neck and smiles.\n'The goddesses will surely favour you,' she says.\nIf you have a silver horseshoe , turn to 249. If not, turn to\n203.",
     "choices": [
       {
         "text": "Se possuir uma ferradura de prata",
         "target": 249
+      },
+      {
+        "text": "Caso não possua uma ferradura de prata",
+        "target": 203
       }
     ],
     "combats": [],
@@ -4548,6 +4589,10 @@
       {
         "text": "codeword Baluster",
         "target": 343
+      },
+      {
+        "text": "Se não tiver a palavra-código Baluster",
+        "target": 68
       }
     ],
     "combats": [],
@@ -4970,6 +5015,10 @@
       {
         "text": "clover",
         "target": 272
+      },
+      {
+        "text": "Caso não possua um trevo de quatro folhas",
+        "target": 203
       }
     ],
     "combats": [],
@@ -6533,7 +6582,12 @@
     "id": 328,
     "text": "As Planícies Sem Fim são “o celeiro de Golnir” – um vasto\n\nextensão ondulada de campos que brilham no verão como colchas de ouro.\n\nLindas aldeias caiadas aninham-se ao lado de riachos preguiçosos. As fazendas\n\nestão cheios de gado gordo. O perigo é desconhecido para o\n\nhabitantes desta paisagem idílica.\n\nQuando estiver pronto para seguir em direção a pastagens frescas",
     "text_en": "The Endless Plains are 'the Breadbasket of Golnir' – a vast\nrolling expanse of fields that gleam in summer like quilts of gold.\nPretty whitewashed villages nestle beside lazy streams. The farms\nare filled with plump livestock. Danger is unknown to the\ninhabitants of this idyllic landscape.\nWhen you are ready to head on towards fresh pastures, turn\nto 77.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Partir em direção a novas pastagens",
+        "target": 77
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -7193,6 +7247,10 @@
       {
         "text": "all during the battle",
         "target": 377
+      },
+      {
+        "text": "Caso não tenha sofrido ferimentos na batalha",
+        "target": 17
       }
     ],
     "combats": [],
@@ -7253,6 +7311,10 @@
       {
         "text": "Se possuir a palavra-código Bashful",
         "target": 430
+      },
+      {
+        "text": "Se não tiver a palavra-código Bashful",
+        "target": 455
       }
     ],
     "combats": [],
@@ -7523,6 +7585,10 @@
       {
         "text": "para 17. Caso contrário, você morrerá em segundos –",
         "target": 560
+      },
+      {
+        "text": "Caso não possua a bênção necessária",
+        "target": 17
       }
     ],
     "combats": [],
@@ -7773,6 +7839,10 @@
       {
         "text": "Se a caixa estiver marcada e possuir a cabeça de dragão",
         "target": 614
+      },
+      {
+        "text": "Caso não possua uma cabeça de dragão",
+        "target": 491
       }
     ],
     "combats": [],
@@ -7787,6 +7857,10 @@
       {
         "text": "Se você vencer a luta",
         "target": 467
+      },
+      {
+        "text": "Render-se e depor as armas",
+        "target": 319
       }
     ],
     "combats": [
@@ -8042,6 +8116,10 @@
       {
         "text": "Se possuir uma cabeça decepada",
         "target": 786
+      },
+      {
+        "text": "Caso não carregue uma cabeça decepada",
+        "target": 258
       }
     ],
     "combats": [],
@@ -8056,6 +8134,10 @@
       {
         "text": "Se possuir a palavra-código Bullion",
         "target": 588
+      },
+      {
+        "text": "Se não tiver a palavra-código Bullion",
+        "target": 353
       }
     ],
     "combats": [],
@@ -8212,6 +8294,10 @@
       {
         "text": "Se possuir o título Paladino de Ravayne",
         "target": 492
+      },
+      {
+        "text": "Se não possuir o título de Paladino de Ravayne",
+        "target": 319
       }
     ],
     "combats": [],
@@ -8422,6 +8508,10 @@
       {
         "text": "455. Caso contrário",
         "target": 560
+      },
+      {
+        "text": "Se não tiver a bênção de imunidade a veneno",
+        "target": 455
       }
     ],
     "combats": [],
@@ -8903,7 +8993,12 @@
     "id": 457,
     "text": "Você se encontra deitado em um tapete de folhas farfalhantes. Sentado\n\ncom um estremecimento, você olha ao redor da clareira. No lugar do\n\nmesa de banquete há apenas um tronco de árvore caído. Não há\n\ncadeiras de espaldar alto, apenas um círculo de cogumelos. Onde você\n\npensei que havia um grupo de senhores e senhoras vestidos de pele,\n\nhá apenas algumas corujas vigilantes sentadas em um galho alto.\n\nVocê quase foi pego pelo glamour dos elfos. Felizmente você\n\nignoraram seu feitiço a tempo. Jogue dois dados e se o total for\n\nmaior que sua pontuação Magia, você ganha 1 ponto de M AGIC.\n\nDepois de fazer isso, você pode retornar pelo caminho",
     "text_en": "You find yourself lying on a carpet of rustling leaves. Sitting up\nwith a wince, you look around the glade. In place of the\nbanqueting table there is just a fallen tree trunk. There are no\nhigh-backed chairs, only a ring of toadstools. Where you\nthought there had been a group of fur-robed lords and ladies,\nthere are only several watchful owls sitting on a high branch.\nYou were nearly trapped by the elves' glamour. Luckily you\nshrugged off their spell in time. Roll two dice, and if the total is\nhigher than your MAGIC score then you gain 1 point of M AGIC.\nOnce you have done that, you can return along the path. Turn\nto 22.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Retornar pela trilha",
+        "target": 22
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -8912,7 +9007,12 @@
     "id": 458,
     "text": "Você está amarrado em ferros, despojado de todos os seus bens e\n\ndinheiro (risque-os da sua Folha de Aventuras) e leve-os para\n\nCastelo Ravayne, onde você é jogado nas masmorras",
     "text_en": "You are bundled in irons, divested of all your possessions and\ncash (cross them off your Adventure Sheet) and hauled off to\nCastle Ravayne, where you are flung into the dungeons. Turn\nto 365.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Ser levado às masmorras do Castelo Ravayne",
+        "target": 365
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -9055,6 +9155,10 @@
       {
         "text": "você pode adicionar 1 a ele. Se a caixa acima estiver vazia, marque-a",
         "target": 489
+      },
+      {
+        "text": "Se este local já tiver sido explorado anteriormente",
+        "target": 514
       }
     ],
     "combats": [],
@@ -9375,6 +9479,10 @@
       {
         "text": "Pontuação 6-20 Você enfrenta a tempestade",
         "target": 198
+      },
+      {
+        "text": "Caso não possua a bênção de marinheiro",
+        "target": 358
       }
     ],
     "combats": [],
@@ -10176,6 +10284,10 @@
       {
         "text": "Bunting",
         "target": 518
+      },
+      {
+        "text": "Se não tiver a palavra-código Bunting",
+        "target": 543
       }
     ],
     "combats": [],
@@ -10472,6 +10584,10 @@
       {
         "text": "the title Protector of Sokara",
         "target": 426
+      },
+      {
+        "text": "Se não possuir o título de Protetor de Sokara",
+        "target": 287
       }
     ],
     "combats": [],
@@ -10560,6 +10676,10 @@
       {
         "text": "Se você sobreviver",
         "target": 505
+      },
+      {
+        "text": "Caso não sobreviva à queda",
+        "target": 560
       }
     ],
     "combats": [],
@@ -11546,6 +11666,10 @@
       {
         "text": "Se possuir a palavra-código Boysen",
         "target": 633
+      },
+      {
+        "text": "Se não tiver a palavra-código Boysen",
+        "target": 657
       }
     ],
     "combats": [],
@@ -11729,6 +11853,10 @@
       {
         "text": "Se possuir a palavra-código Bones",
         "target": 209
+      },
+      {
+        "text": "Se não tiver a palavra-código Bones",
+        "target": 37
       }
     ],
     "combats": [],
@@ -11934,6 +12062,10 @@
       {
         "text": "palavra-código Boysen e depois",
         "target": 657
+      },
+      {
+        "text": "Caso contrário, seguir rumo alternativo",
+        "target": 681
       }
     ],
     "combats": [],
@@ -11946,7 +12078,12 @@
     "id": 634,
     "text": "Você puxa conversa com um anão que está entrando no\n\nmesma direção. Ele trabalha como bobo da corte no inverno, geralmente\n\npassando um mês em cada castelo que visita. 'Minhas piadas e truques\n\nsignifica que sou muito requisitado.\n\n— E no verão?\n\n'Infelizmente, ninguém tem tempo para festas quando o tempo está bom.'\n\nSua inteligência amigável inspira você. Jogue um dado e se você conseguir\n\nmaior que sua pontuação de C HARISMA e adicione 1 a ela. Então",
     "text_en": "You strike up a conversation with a dwarf who is going in the\nsame direction. He works as a jester in the wintertime, usually\nspending a month at each castle he visits. 'My jokes and tricks\nmean I am much in demand.'\n'And in the summer?'\n'Alas, no one has time for feasts when the weather is fine.'\nHis friendly wit inspires you. Roll one die, and if you get\nhigher than your C HARISMA score then add 1 to it. Then turn\nto 223.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Continuar a jornada pela estrada",
+        "target": 223
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -12041,6 +12178,10 @@
       {
         "text": "Se possuir a palavra-código Buzz",
         "target": 616
+      },
+      {
+        "text": "Se não tiver a palavra-código Buzz",
+        "target": 712
       }
     ],
     "combats": [],
@@ -12129,6 +12270,10 @@
       {
         "text": "Bookworm",
         "target": 479
+      },
+      {
+        "text": "Se não tiver a palavra-código Bookworm",
+        "target": 501
       }
     ],
     "combats": [],
@@ -12202,6 +12347,10 @@
       {
         "text": "Se você vencer a luta",
         "target": 673
+      },
+      {
+        "text": "Fugir correndo do confronto",
+        "target": 697
       }
     ],
     "combats": [
@@ -12557,6 +12706,10 @@
       {
         "text": "Se possuir a palavra-código Blemish",
         "target": 682
+      },
+      {
+        "text": "Se não tiver a palavra-código Blemish",
+        "target": 706
       }
     ],
     "combats": [],
@@ -12601,6 +12754,10 @@
       {
         "text": "Se possuir a palavra-código Baluster",
         "target": 586
+      },
+      {
+        "text": "Se não tiver a palavra-código Baluster",
+        "target": 634
       }
     ],
     "combats": [],
@@ -12858,6 +13015,10 @@
       {
         "text": "Se possuir a palavra-código Bisect",
         "target": 710
+      },
+      {
+        "text": "Se não tiver a palavra-código Bisect",
+        "target": 734
       }
     ],
     "combats": [],
@@ -13024,7 +13185,12 @@
     "id": 695,
     "text": "O estalajadeiro cobra exorbitantes 3 cacos por dia pela alimentação\n\ne hospedagem. Cada dia que você passa aqui, você pode recuperar 1\n\nPonto de resistência se ferido, até o limite do seu normal\n\nPontuação de Vigor não ferida. Quando estiver pronto para sair",
     "text_en": "The innkeeper charges an exorbitant 3 Shards a day for board\nand lodging. Each day you spend here, you can recover 1\nStamina point if injured, up to the limit of your normal\nunwounded Stamina score. When you are ready to leave, turn\nto 81.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Quando estiver pronto para partir para Goldfall",
+        "target": 81
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -13263,6 +13429,10 @@
       {
         "text": "to 758. If it is ticked already",
         "target": 734
+      },
+      {
+        "text": "Se já tiver explorado este local",
+        "target": 758
       }
     ],
     "combats": [],
@@ -13590,6 +13760,10 @@
       {
         "text": "marcado, marque agora",
         "target": 704
+      },
+      {
+        "text": "Se este evento já tiver sido acionado",
+        "target": 486
       }
     ],
     "combats": [],
@@ -13994,6 +14168,10 @@
       {
         "text": "desligue",
         "target": 385
+      },
+      {
+        "text": "Caso não possua a bênção protetora",
+        "target": 560
       }
     ],
     "combats": [],
@@ -14082,6 +14260,10 @@
       {
         "text": "Se a caixa acima estiver vazia, marque-a agora",
         "target": 441
+      },
+      {
+        "text": "Se não tiver a palavra-código Element",
+        "target": 491
       }
     ],
     "combats": [],
@@ -14142,7 +14324,12 @@
     "id": 761,
     "text": "O Saucy Goblin Inn tem uma tarifa de 1 fragmento por dia. Durante o\n\ntempo que você passa aqui, você recuperará 1 ponto de Vigor por dia\n\n(se ferido) até o limite máximo definido pelo seu normal\n\nPontuação de Vigor não ferida. Quando estiver pronto para sair",
     "text_en": "The Saucy Goblin Inn has a tariff of 1 Shard a day. During the\ntime you spend here, you will recover 1 Stamina point per day\n(if injured) up to the maximum limit set by your normal\nunwounded Stamina score. When you are ready to leave, turn\nto 242.",
-    "choices": [],
+    "choices": [
+      {
+        "text": "Quando estiver pronto para partir para a Abadia",
+        "target": 242
+      }
+    ],
     "combats": [],
     "checks": [],
     "codewords": []
@@ -14420,6 +14607,10 @@
       {
         "text": "letter",
         "target": 491
+      },
+      {
+        "text": "Se não possuir a carta diplomática",
+        "target": 541
       }
     ],
     "combats": [],

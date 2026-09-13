@@ -108,7 +108,8 @@ let gameState = {
   currentLandmark: "shipwreck_beach",
   visitedLandmarks: ["shipwreck_beach"],
   travelHistory: ["shipwreck_beach"],
-  visitedChoices: {}
+  visitedChoices: {},
+  awardedSections: {}
 };
 
 // CACHE DAS SEÇÕES
@@ -260,6 +261,9 @@ function renderCurrentSection() {
   // Resetar / Configurar Painel de Combate
   setupSectionCombat(sec);
 
+  // Processar recompensas automáticas da seção (itens, cacos, palavras-código)
+  autoProcessSectionRewards(secNum, sec);
+
   // Renderizar Escolhas
   renderChoices(sec);
 
@@ -271,7 +275,7 @@ function renderCurrentSection() {
 }
 
 /* ==========================================================
-   ESCOLHAS E DECISÕES (MÚLTIPLA ESCOLHA PURA)
+   ESCOLHAS, REQUISITOS E DECISÕES
    ========================================================== */
 
 /**
@@ -291,34 +295,216 @@ function getChoiceHeatClass(targetNum) {
   return "choice-visited-3";
 }
 
+/**
+ * Avalia se o jogador atende aos requisitos de uma escolha (itens, cacos, palavras-código, postos)
+ */
+function evaluateChoiceRequirement(choiceText) {
+  if (!choiceText) return { met: true };
+  const lower = choiceText.toLowerCase();
+
+  // 1. Verificação de Itens Notáveis de Golnir
+  const knownItems = [
+    { key: "ferradura de prata", name: "Ferradura de Prata" },
+    { key: "pé de coelho", name: "Pé de Coelho" },
+    { key: "trevo de quatro folhas", name: "Trevo de Quatro Folhas" },
+    { key: "medalhão verde", name: "Medalhão Verde" },
+    { key: "chave das estrelas", name: "Chave das Estrelas" },
+    { key: "cabeça decepada", name: "Cabeça Decepada" },
+    { key: "cabeça de dragão", name: "Cabeça de Dragão" },
+    { key: "carta diplomática", name: "Carta Diplomática" },
+    { key: "amuleto de escaravelho", name: "Amuleto de Escaravelho" }
+  ];
+
+  for (const item of knownItems) {
+    if (lower.includes(item.key)) {
+      const isNegative = lower.includes("não possua") || lower.includes("não tiver") || lower.includes("não carregue");
+      const hasItem = (gameState.hero.inventory || []).some(inv => inv.toLowerCase().includes(item.key));
+      const met = isNegative ? !hasItem : hasItem;
+      return {
+        type: "item",
+        name: item.name,
+        met: met,
+        reason: isNegative
+          ? (hasItem ? `Você possui ${item.name}` : `Não possui ${item.name}`)
+          : (hasItem ? `Item: ${item.name}` : `Necessita: ${item.name}`)
+      };
+    }
+  }
+
+  // 2. Verificação de Palavras-Código
+  const codeMatch = lower.match(/palavra-código\s+([A-Za-z]+)/i);
+  if (codeMatch) {
+    const code = codeMatch[1].charAt(0).toUpperCase() + codeMatch[1].slice(1).toLowerCase();
+    const isNegative = lower.includes("não tiver") || lower.includes("não possua");
+    const hasCode = !!(gameState.codewords && gameState.codewords[code]);
+    const met = isNegative ? !hasCode : hasCode;
+    return {
+      type: "codeword",
+      name: code,
+      met: met,
+      reason: isNegative
+        ? (hasCode ? `Possui código ${code}` : `Não possui código ${code}`)
+        : (hasCode ? `Código: ${code}` : `Necessita código: ${code}`)
+    };
+  }
+
+  // 3. Verificação de Título
+  if (lower.includes("paladino de ravayne")) {
+    const isNegative = lower.includes("não possuir") || lower.includes("não tiver");
+    const hasTitle = (gameState.hero.titles || "").toLowerCase().includes("paladino de ravayne");
+    const met = isNegative ? !hasTitle : hasTitle;
+    return {
+      type: "title",
+      name: "Paladino de Ravayne",
+      met: met,
+      reason: isNegative ? (hasTitle ? `Você é Paladino` : `Não é Paladino`) : (hasTitle ? `Paladino de Ravayne` : `Necessita título de Paladino`)
+    };
+  }
+
+  // 4. Verificação de Posto
+  if (lower.includes("4º posto")) {
+    const isNegative = lower.includes("inferior") || lower.includes("não for");
+    const hasRank = (gameState.hero.rank || 1) >= 4;
+    const met = isNegative ? !hasRank : hasRank;
+    return {
+      type: "rank",
+      met: met,
+      reason: isNegative ? (hasRank ? `4º Posto ou maior` : `Posto inferior`) : (hasRank ? `4º Posto verificado` : `Necessita de 4º Posto`)
+    };
+  }
+
+  // 5. Custo em Cacos de Ouro
+  const shardsMatch = lower.match(/(\d+)\s+cacos/i);
+  if (shardsMatch && (lower.includes("pag") || lower.includes("cust") || lower.includes("compr"))) {
+    const cost = parseInt(shardsMatch[1]);
+    const hasShards = (gameState.hero.shards || 0) >= cost;
+    return {
+      type: "shards",
+      cost: cost,
+      met: hasShards,
+      reason: hasShards ? `${gameState.hero.shards}/${cost} Cacos` : `Necessita de ${cost} Cacos (Você tem ${gameState.hero.shards})`
+    };
+  }
+
+  return { met: true };
+}
+
+/**
+ * Processa aquisições automáticas da seção (itens, cacos, palavras-código)
+ */
+function autoProcessSectionRewards(secNum, sec) {
+  const rewardBanner = document.getElementById("reward-banner-container");
+  if (rewardBanner) rewardBanner.classList.add("hidden");
+
+  if (!sec || !sec.text) return;
+  if (!gameState.awardedSections) gameState.awardedSections = {};
+  const sKey = String(secNum);
+  if (gameState.awardedSections[sKey]) return; // Já concedido nesta aventura
+
+  const txt = sec.text;
+  let rewardsGiven = [];
+
+  // 1. Palavras-Código automáticas
+  const codeMatches = txt.matchAll(/(?:anote|obtenha|tome|registre)\s+(?:a\s+)?palavra-código\s+([A-Z][a-z]+)/gi);
+  for (const m of codeMatches) {
+    const code = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+    if (!gameState.codewords[code]) {
+      gameState.codewords[code] = true;
+      rewardsGiven.push(`Palavra-código: ${code}`);
+      updateCodewordsUI();
+    }
+  }
+
+  // 2. Cacos de Ouro automáticos
+  const shardMatches = txt.matchAll(/(?:você encontra|você ganha|você recebe|pegue|receba|tome)\s+(\d+)\s+cacos/gi);
+  for (const m of shardMatches) {
+    const amount = parseInt(m[1]);
+    if (amount > 0) {
+      gameState.hero.shards = (gameState.hero.shards || 0) + amount;
+      rewardsGiven.push(`+${amount} Cacos de Ouro`);
+      renderHeroSheet();
+    }
+  }
+
+  // 3. Itens Notáveis automáticos
+  const rewardItems = [
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:uma?\s+)?ferradura de prata/i, name: "Ferradura de prata" },
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:um\s+)?amuleto de escaravelho/i, name: "Amuleto de escaravelho" },
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:um\s+)?amuleto de pé de coelho/i, name: "Pé de coelho" },
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:um\s+)?trevo de quatro folhas/i, name: "Trevo de quatro folhas" },
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:um\s+)?medalhão verde/i, name: "Medalhão verde" },
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:a\s+)?chave das estrelas/i, name: "Chave das estrelas" },
+    { pattern: /(?:ganha|recebe|encontra|pegue|obtenha)\s+(?:uma\s+)?carta diplomática/i, name: "Carta diplomática" }
+  ];
+
+  for (const item of rewardItems) {
+    if (item.pattern.test(txt)) {
+      const alreadyHas = (gameState.hero.inventory || []).some(inv => inv.toLowerCase().includes(item.name.toLowerCase()));
+      if (!alreadyHas && gameState.hero.inventory.length < 12) {
+        gameState.hero.inventory.push(item.name);
+        rewardsGiven.push(`Item: ${item.name}`);
+        renderHeroSheet();
+      }
+    }
+  }
+
+  if (rewardsGiven.length > 0) {
+    gameState.awardedSections[sKey] = true;
+    if (rewardBanner) {
+      const titleEl = document.getElementById("reward-banner-title");
+      const descEl = document.getElementById("reward-banner-desc");
+      if (titleEl) titleEl.textContent = "🎁 Recompensa Adquirida!";
+      if (descEl) descEl.textContent = rewardsGiven.join(" • ");
+      rewardBanner.classList.remove("hidden");
+    }
+    if (window.soundEngine) soundEngine.playSuccess();
+    saveGameToLocalStorage();
+  }
+}
+
 function renderChoices(sec) {
   const container = document.getElementById("choices-list");
   container.innerHTML = "";
 
   if (!sec || !sec.choices || sec.choices.length === 0) {
     container.innerHTML = `<p style="color: #887463; font-style: italic;">Sua jornada neste local chegou a um momento de reflexão. Escolha um novo rumo.</p>`;
+    appendFallbackReturn(container);
     return;
   }
 
-  const isLocked = activeCombat && activeCombat.staminaCurrent > 0;
+  const isCombatLocked = activeCombat && activeCombat.staminaCurrent > 0;
+  let unblockedCount = 0;
 
   sec.choices.forEach(ch => {
     const heatClass = getChoiceHeatClass(ch.target);
     const visitCount = (gameState.visitedChoices && gameState.visitedChoices[String(ch.target)]) || 0;
+    const req = evaluateChoiceRequirement(ch.text);
+
+    const isLocked = isCombatLocked || !req.met;
+    if (!isLocked) unblockedCount++;
 
     const btn = document.createElement("button");
-    btn.className = `choice-btn ${isLocked ? "combat-locked" : ""} ${heatClass}`.trim();
+    const lockClass = !req.met ? "choice-locked" : "";
+    btn.className = `choice-btn ${isCombatLocked ? "combat-locked" : ""} ${lockClass} ${heatClass}`.trim();
 
     if (isLocked) {
       btn.disabled = true;
-      btn.title = "Você precisa resolver o combate antes de tomar uma decisão!";
+      btn.title = isCombatLocked
+        ? "Você precisa resolver o combate antes de tomar uma decisão!"
+        : `Requisito não atendido: ${req.reason}`;
     }
 
-    // Texto da escolha
-    btn.textContent = ch.text || "Avançar na jornada";
+    // Texto da escolha com tags visuais claras
+    let labelHtml = escapeHtml(ch.text || "Avançar na jornada");
+    if (req.reason) {
+      const tagClass = req.met ? "unlocked" : "locked";
+      const tagIcon = req.met ? "✨" : "🔒";
+      labelHtml += ` <span class="choice-req-tag ${tagClass}">${tagIcon} ${escapeHtml(req.reason)}</span>`;
+    }
+    btn.innerHTML = labelHtml;
 
     // Indicador visual de repetição (tooltip discreto)
-    if (visitCount > 0) {
+    if (visitCount > 0 && req.met) {
       btn.title = visitCount === 1
         ? "Você já percorreu este caminho antes."
         : `Você já percorreu este caminho ${visitCount} vezes.`;
@@ -329,12 +515,41 @@ function renderChoices(sec) {
         alert("Você está em combate! Termine a luta ou fuja antes de avançar.");
         return;
       }
+      if (!req.met) {
+        alert(`Caminho bloqueado: ${req.reason}`);
+        return;
+      }
+
+      // Dedução de cacos se a escolha tiver custo pago
+      if (req.cost && req.cost > 0) {
+        gameState.hero.shards = Math.max(0, (gameState.hero.shards || 0) - req.cost);
+        renderHeroSheet();
+      }
+
       if (window.soundEngine) soundEngine.playClick();
       goToSection(ch.target);
     });
 
     container.appendChild(btn);
   });
+
+  // Se todas as escolhas estiverem bloqueadas por falta de itens/requisitos, oferece retorno seguro
+  if (unblockedCount === 0 && !isCombatLocked) {
+    appendFallbackReturn(container);
+  }
+}
+
+function appendFallbackReturn(container) {
+  const fallbackBtn = document.createElement("button");
+  fallbackBtn.className = "choice-btn choice-fallback-return";
+  const fallbackTarget = gameState.history.length > 0 ? gameState.history[gameState.history.length - 1] : 2;
+  fallbackBtn.innerHTML = `↩️ Retornar pelo caminho anterior (Você não possui os itens para avançar aqui)`;
+  fallbackBtn.title = "Permite voltar com segurança para o local anterior de sua jornada.";
+  fallbackBtn.addEventListener("click", () => {
+    if (window.soundEngine) soundEngine.playClick();
+    goToSection(fallbackTarget);
+  });
+  container.appendChild(fallbackBtn);
 }
 
 function goToSection(targetNum) {
