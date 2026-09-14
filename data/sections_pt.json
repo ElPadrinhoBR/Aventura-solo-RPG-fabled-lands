@@ -189,23 +189,23 @@
   },
   "9": {
     "id": 9,
-    "text": "O portão do velho forte costeiro está escancarado, pendendo precariamente sobre uma dobradiça enferrujada. O pátio interno foi tomado por ervas daninhas, vinhas rasteiras e escombros de alvenaria.\n\nAo fundo, sob arcos de pedra sombrios, você avista três portas maciças de carvalho esculpidas com entalhes arcanos, além do caminho que leva de volta à estrada.",
+    "text": "No interior do velho forte abandonado, você encontra uma escadaria de pedra gasta que desce em espiral até o leito rochoso das fundações.\n\nLá embaixo, diante de você, erguem-se três portas maciças de carvalho escuro, cada uma entalhada com um símbolo misterioso:\n\n• A porta à **esquerda** traz entalhada uma **cabeça de bode** com chifres recurvados.\n• A porta **central** traz gravado um **sol flamejante** em círculos concêntricos.\n• A porta à **direita** traz a escultura detalhada de uma **aranha em sua teia**.\n\nO ar aqui embaixo é frio e imóvel como uma cripta esquecida.",
     "text_en": "Inside you find a set of steps winding down into the bedrock. At\nthe bottom are three doors, each carved with a symbol . The\nsymbol on the door to the left is a ram's head. The symbol on\nthe central door is a fiery sun. The symbol on the right-hand\ndoor is a spider in a web.\nOpen the left-hand door turn to 497\nOpen the central door turn to 522\nOpen the right-hand door turn to 547\nLeave the fort turn to 373",
     "choices": [
       {
-        "text": "Abrir a porta da esquerda",
+        "text": "🚪 Abrir a porta da esquerda (Entalhe da Cabeça de Bode)",
         "target": 497
       },
       {
-        "text": "Abrir a porta central",
+        "text": "🚪 Abrir a porta central (Entalhe do Sol Flamejante)",
         "target": 522
       },
       {
-        "text": "Abrir a porta da direita",
+        "text": "🚪 Abrir a porta da direita (Entalhe da Aranha na Teia)",
         "target": 547
       },
       {
-        "text": "Sair do forte",
+        "text": "🏰 Subir as escadas e deixar o forte de volta à estrada costeira",
         "target": 373
       }
     ],
@@ -9695,11 +9695,11 @@
   },
   "497": {
     "id": 497,
-    "text": "Você empurra a pesada porta da esquerda. Ela se abre com um rangido ecoante pelas paredes de pedra fria. O ar lá dentro é denso e cheira a poeira e teias de aranha antigas. Tochas apagadas há séculos guarnecem as paredes de uma antecâmara empoeirada.",
+    "text": "Você empurra a pesada porta da esquerda. Ela se abre com um estalo de engrenagens ancestrais. \n\nDe repente, de dentro da penumbra, uma figura metálica colossal com cabeça de bode avança sobre você com passos mecânicos ensurdecedores!\n\nVocê saca sua arma e apara os primeiros golpes de ferro, mas percebe com horror que a criatura mecânica é incansável e indestrutível. Seus golpes tilintam inofensivos contra a couraça de bronze e aço do autômato!\n\nAo se virar em fuga desesperada rumo às escadas, você é golpeado com violência esmagadora entre os ombros!\n\n*(Você sofre ferimentos graves pelo impacto com o autômato de ferro).*\n\nArquejando de dor, você sobe as escadas correndo e escapa cambaleando para fora dos portões do forte!",
     "text_en": "A metal automaton with a goat-like head clanks forward to\nattack you. You parry its first few blows, but you soon realize\nthat it is tireless and unkillable. Turning to flee, you are struck\nheavily across the shoulders. Roll two dice and subtract your\narmour's Defence bonus (if any) from the roll. The result is how\nmany Stamina points you lose. If you survive, turn to 373.",
     "choices": [
       {
-        "text": "🏰 Subir até a estrada do velho forte",
+        "text": "🏃 Escapar do autômato de metal e fugir para a estrada costeira",
         "target": 373
       }
     ],
@@ -9928,16 +9928,12 @@
     "text_en": "You descend the cliff path to a stretch of shingle. A fishing\nvillage is set at the top of the beach – small stone houses with\nslate roofs. Nets and boats lie on the pebbles in front of a\ngroyne. As you approach, a couple of fishermen look up and\nwave.\nTalk to them turn to 561\nWalk along the beach turn to 585\nReturn to the top of the cliffs turn to 373",
     "choices": [
       {
-        "text": "Conversar com them",
-        "target": 561
-      },
-      {
-        "text": "Caminhe pela praia",
-        "target": 585
-      },
-      {
-        "text": "🏰 Subir até a estrada do velho forte",
+        "text": "🧗 Subir a trilha íngreme do penhasco até a estrada costeira",
         "target": 373
+      },
+      {
+        "text": "🚶 Caminhar ao longo da praia seguindo a linha da maré",
+        "target": 561
       }
     ],
     "combats": [],
@@ -10117,11 +10113,11 @@
   },
   "522": {
     "id": 522,
-    "text": "A porta central cede sob seu peso e revela um corredor comprido e cavernoso. Ecos de gotas de água pingando em algum lugar distante ressoam pelas paredes úmidas. Há uma atmosfera pesada e expectante no ar.",
+    "text": "Você destranca a porta central entalhada com o sol flamejante.\n\nNo milésimo de segundo em que ela se abre, uma labareda colossal de fogo e calor infernal irrompe de dentro da câmara! As chamas lambem seus cabelos e causam bolhas dolorosas em sua pele num piscar de olhos.\n\nBatendo a porta com um estrondo desesperado para sufocar a fornalha, você tropeça pelas escadarias, tossindo fuligem e fumaça, e cambaleia para fora do forte em direção ao ar fresco da costa.",
     "text_en": "A blast of heat erupts from behind the door, burning away your\nhair and blistering your skin in seconds. Slamming the door shut,\nyou stagger back outside.\nLose 1-6 Stamina points permanently – i.e. reduce both your\ncurrent and unwounded Stamina by the roll of one die. In\naddition, you lose 1 point of C HARISMA because of the\ndisfiguring burns.\nIf you are still alive, turn to 373.",
     "choices": [
       {
-        "text": "🏰 Subir até a estrada do velho forte",
+        "text": "🏃 Escapar da explosão de fogo e sair para a estrada costeira",
         "target": 373
       }
     ],
@@ -10542,15 +10538,15 @@
   },
   "547": {
     "id": 547,
-    "text": "Você se aproxima da porta da direita do forte. As ferragens antigas estão cobertas de verdete e poeira secular. Você segura o puxador de bronze esculpido em formato de serpente marinha e empurra a porta para revelar a câmara secreta.",
+    "text": "Você se aproxima cautelosamente da porta da direita, esculpida com uma grande aranha em sua teia. \n\nAs dobradiças estão intocadas pelo tempo. Você segura o puxador de ferro frio e empurra a porta para revelar o que jaz nas profundezas da câmara...",
     "text_en": "If the box is empty, put a tick in it and turn to 572. If the box is\nalready ticked, turn to 596.",
     "choices": [
       {
-        "text": "🚪 Entrar na câmara da direita pela primeira vez",
+        "text": "🚪 Entrar na câmara da aranha pela primeira vez",
         "target": 572
       },
       {
-        "text": "🚪 Retornar à câmara da direita (já explorada)",
+        "text": "🚪 Reentrar na câmara da aranha (já explorada anteriormente)",
         "target": 596
       }
     ],
@@ -10765,11 +10761,11 @@
     "text_en": "As you trudge across the pebbles down the water's edge, a\nbreeze blows in from out at sea, bringing the faintly heard strains\nof flute music.\n'What's that?' you ask the fisherman.\n'It's from the belfry of the old village that now lies out under\nthe sea,' replies the older man. 'At low tide you can see the roofs\nof the buildings. Walk out to them, even.'\n'Not that anyone would,' puts in the other man with a\nshudder.\n'Flute music – from a belfry?'\n'They never had a bell, see. A fellow called folk to prayer\nwith his flute. They say he was still playing when the sea closed\nover his head.'\nContinue along the beach turn to 585\nReturn to the top of the cliff turn to 373",
     "choices": [
       {
-        "text": "Continuar a jornada",
+        "text": "🚶 Continuar caminhando pela praia deserta",
         "target": 585
       },
       {
-        "text": "🏰 Subir até a estrada do velho forte",
+        "text": "🧗 Retornar e subir a trilha até a estrada costeira",
         "target": 373
       }
     ],
@@ -10944,19 +10940,19 @@
   },
   "572": {
     "id": 572,
-    "text": "A câmara além da porta da direita está iluminada por um estranho brilho fosforescente que emana de liquens presos às vigas do teto. No centro do aposento repousa um pedestal de pedra negra com inscrições entalhadas e um baú ornamentado com tiras de ferro.",
+    "text": "Atrás da porta da aranha repousa uma câmara secreta intocada pelo tempo!\n\nSobre um pedestal de pedra no centro do aposento repousa um baú de cobre ornado com arabescos. Ao erguê-lo, seus olhos brilham diante dos tesouros guardados há séculos:\n\n• **300 Cacos de Ouro** reluzentes!\n• Uma **Cota de Malha (+2 Defesa)** finamente forjada.\n• Uma **Bússola de Latão (+1 Exploração)**.\n\nVocê recolhe as preciosidades. Agora, você pode arriscar uma das outras portas do forte ou partir em segurança com sua recompensa.",
     "text_en": "Behind the door is a copper chest containing 300 Shards, ring\nmail ( Defence +2)  and a compass (S COUTING +1) . After\nmaking a note of anything you want to take, decide whether to\ntry one of the other doors or leave.\nOpen the left-hand door turn to 497\nOpen the central door turn to 522\nLeave the fort turn to 373",
     "choices": [
       {
-        "text": "Abrir a porta da esquerda",
+        "text": "🚪 Abrir a porta da esquerda (Entalhe da Cabeça de Bode)",
         "target": 497
       },
       {
-        "text": "Abrir a porta central",
+        "text": "🚪 Abrir a porta central (Entalhe do Sol Flamejante)",
         "target": 522
       },
       {
-        "text": "Sair do forte",
+        "text": "🏰 Sair do forte em segurança pela estrada costeira",
         "target": 373
       }
     ],
@@ -11229,11 +11225,11 @@
     "text_en": "You watch clouds scud across the sky. The breeze raises white-\ncaps on the water and drives foamy waves up into the rock-\npools. But for a few crabs and a circling gull or two, you are\nalone on this desolate stretch of shore.\nWait for low tide turn to 609\nGo back up the clifftops turn to 373",
     "choices": [
       {
-        "text": "Espere pela maré baixa",
+        "text": "⏳ Aguardar a maré baixa para explorar as ruínas submersas",
         "target": 609
       },
       {
-        "text": "🏰 Subir até a estrada do velho forte",
+        "text": "🧗 Subir a trilha das falésias de volta à estrada costeira",
         "target": 373
       }
     ],
@@ -11418,19 +11414,19 @@
   },
   "596": {
     "id": 596,
-    "text": "Você retorna à câmara da direita do forte costeiro. O aposento permanece em silêncio sepulcral, exatamente como você o deixou após sua exploração anterior.",
+    "text": "Você retorna à câmara da aranha no forte costeiro. \n\nAssim que você toca a maçaneta de bronze, uma enorme aranha negra e peluda despenca sobre o seu pulso e crava suas presas pontiagudas! O veneno ardente faz seus dedos e mão enrijecerem.\n\n*(Você sente os efeitos paralisantes da peçonha aracnídea).*\n\nNão há mais tesouros ou segredos a serem saqueados neste aposento.",
     "text_en": "You are bitten by a large spider which drops from the door\nhandle on to your wrist. Its venom causes your hand to go stiff,\nthe fingers permanently crooked. Lose 1 from your C OMBAT\nscore unless you have a blessing of Immunity to Disease/Poison.\nThere is nothing else here.\nOpen the left-hand door turn to 497\nOpen the central door turn to 522\nLeave the fort turn to 373",
     "choices": [
       {
-        "text": "Abrir a porta da esquerda",
+        "text": "🚪 Abrir a porta da esquerda (Entalhe da Cabeça de Bode)",
         "target": 497
       },
       {
-        "text": "Abrir a porta central",
+        "text": "🚪 Abrir a porta central (Entalhe do Sol Flamejante)",
         "target": 522
       },
       {
-        "text": "Sair do forte",
+        "text": "🏰 Subir as escadas e sair do forte para a estrada costeira",
         "target": 373
       }
     ],
